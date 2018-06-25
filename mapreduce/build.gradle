@@ -1,0 +1,61 @@
+group 'mapreduce'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+shadowJar{
+    zip64  true
+    baseName='spark-refact'
+    classifier = null
+    version = null
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+}
+
+jar {
+    manifest {
+        attributes(
+                "Manifest-Version": 1.0,
+                "Main-Class": 'BulkLoadT')
+    }
+}
+
+
+sourceCompatibility = 1.7
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+}
+
+repositories {
+    maven { url 'http://124.207.207.21:62125/repository/maven-central/' }
+    maven { url 'http://124.207.207.21:62125/repository/maven-snapshots/' }
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url "http://repo.maven.apache.org/maven2" }
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '2.7.3'
+    compile group: 'org.apache.hadoop', name: 'hadoop-hdfs', version: '2.7.3'
+    compile group: 'org.apache.hadoop', name: 'hadoop-mapreduce-client', version: '2.7.3'
+    compile group: 'org.apache.hbase', name: 'hbase-client', version: '1.2.1'
+    compile group: 'org.apache.hbase', name: 'hbase-server', version: '1.2.1'
+    compile group: 'org.apache.spark', name: 'spark-core_2.10', version: '2.0.0'
+}
